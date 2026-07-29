@@ -43,7 +43,7 @@ interface LinePromoCandidate {
 
 interface OrderPromoCandidate {
   promo: ThresholdPromotion
-  discount: number
+  amountOff: number
 }
 
 function round2(value: number): number {
@@ -182,13 +182,12 @@ function selectBestOrderPromotion(
       continue
     }
 
-    const discount = round2(promo.amountOff)
     if (
       best === null ||
-      discount > best.discount ||
-      (discount === best.discount && isPreferredPromo(promo, best.promo))
+      promo.amountOff > best.amountOff ||
+      (promo.amountOff === best.amountOff && isPreferredPromo(promo, best.promo))
     ) {
-      best = { promo, discount }
+      best = { promo, amountOff: promo.amountOff }
     }
   }
 
@@ -198,7 +197,7 @@ function selectBestOrderPromotion(
 
   return {
     appliedPromoId: best.promo.id,
-    discount: round2(best.discount),
+    discount: round2(best.amountOff),
   }
 }
 
